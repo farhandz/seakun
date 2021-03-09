@@ -6,6 +6,7 @@ import Order from '../views/Order.vue'
 Vue.use(VueRouter)
 
 const routes = [
+  { path: '*', redirect: { name: 'order' } },
   {
     path: '/dashboard',
     name: 'Home',
