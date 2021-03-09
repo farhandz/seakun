@@ -2,11 +2,11 @@
   <main>
     <h1>Order list</h1>
     <div class="wrap-submit">
-      <div>
+      <div class="wrap-input-search">
         <input @change="OnChangeData($event)" type="text">
         <button @click="onSubmit()" class="btn-submit">submit</button>
       </div>
-      <select v-model="selected">
+      <select style="margin-top: 10px" v-model="selected">
         <option disabled value="">Please select one</option>
         <option>Ascending</option>
         <option>Descending</option>
@@ -19,11 +19,11 @@
     <div v-else>
       <div  v-for="p in filterByName" :key="p.id" class="wrap-order-list">
       <div class="wrap-header-order">
-          <div>
-            <span>order id</span>
+          <div class="wrap-id-header">
+            <span>id</span>
             <span class="price">{{p.orderId}}</span>
           </div>
-          <div>
+          <div class="wrap-created-header">
             <span  class="date">Created at</span>
             <span>10000</span>
           </div>
@@ -60,11 +60,11 @@
     <div v-else>
     <div  v-for="p in paginated" :key="p.id" class="wrap-order-list" @click="OnModalShow(p)">
      <div class="wrap-header-order">
-        <div>
+        <div class="wrap-id-header">
           <span>order id</span>
           <span class="price">{{p.orderId}}</span>
         </div>
-        <div>
+        <div class="wrap-created-header">
           <span  class="date">Created at</span>
           <span>{{ parseIsoString(p.createdAt) }}</span>
         </div>
@@ -116,25 +116,34 @@
         <div class="modal-container">
           <div class="modal-header">
             <slot name="header">
-          <div class="wrap-order-list" @click="OnModalShow(p)">
-            <div class="wrap-header-order">
+               <div class="wrap-header-order">
+        <div class="wrap-id-header">
+          <span>order id</span>
+          <span class="price">{{orderDetail.orderId}}</span>
+        </div>
+        <div class="wrap-created-header">
+          <span  class="date">Created at</span>
+          <span>{{ parseIsoString(orderDetail.createdAt) }}</span>
+        </div>
+     </div>
+          <div class="wrap-card-body-data">
+            <div>
               <div>
-                <span>id</span>
-                <span class="price">{{orderDetail.orderId}}</span>
-              </div>
-              <div>
-                <span class="date">Created at</span>
-                <span>{{orderDetail.createdAt}}</span>
+              <div class="provider-list">
+                  <div class="provider">
+                      <div>{{orderDetail.personalAccount.name}}</div>
+                  </div>
+                  <div class="provider">
+                     <div>{{orderDetail.personalAccount.email}}</div>
+                  </div>
+                  <div class="provider">
+                     <div>{{orderDetail.personalAccount.phonenumber}}</div>
+                  </div>
               </div>
             </div>
-            <div class="wrap-card-body">
-              <div>
-                <div class="akun">{{orderDetail.personalAccount.name}}</div>
-                <div class="akun">{{orderDetail.personalAccount.email}}</div>
-                <div class="akun">{{orderDetail.personalAccount.phonenumber}}</div>
-              </div>
-              <div class="akun-provider">
-                <div class="provider-list">
+            </div>
+            <div style="margin-top: 10px" class="akun-provider">
+              <div class="provider-list">
                   <div class="provider">
                       <span>provider:</span>
                       <span>{{orderDetail.provider}}</span>
@@ -147,11 +156,10 @@
                       <span>exp:</span>
                       <span>{{parseIsoString(orderDetail.expired)}}</span>
                   </div>
-                </div>
               </div>
-              <div class="akun">
-                <p>Rp.{{orderDetail.payment.paymentTotal}}</p>
-              </div>
+            </div>
+            <div class="akun">
+              <p>Rp.{{(orderDetail.payment.paymentTotal)}}</p>
             </div>
           </div>
             </slot>
@@ -247,14 +255,6 @@ export default {
           return new Date(newB) - new Date(newA)
         }
       })
-
-      // if (!this.selected) {
-      //   return this.items.slice(start, end)
-      // } else {
-      //   return this.items.slice(start, end).sort((a, b) => {
-      //     return new Date(a.date) - new Date(b.date)
-      //   })
-      // }
     }
   },
   methods: {
@@ -302,7 +302,6 @@ export default {
 .btn-submit {
   border: none;
   padding: 6px;
-  margin-left: 10px;
   background: #0971F1;
   outline: none;
   cursor: pointer;
@@ -325,8 +324,10 @@ input[type="text"] {
 .wrap-card-body {
   display: flex;
   justify-content: space-between;
-  align-items: center;
-  align-content: center;
+}
+.wrap-card-body-data {
+  display: flex;
+  justify-content: space-between;
 }
 
 .price {
@@ -368,6 +369,54 @@ input[type="text"] {
 .akun-detail {
   display: flex;
   margin-top: 7px;
+  font-size: 12px;
   justify-content: space-between
+}
+
+@media (max-width: 600px) {
+    .wrap-card-body{
+        display: flex;
+        flex-direction: column;
+        margin-left: 20px;
+        font-size: 20px;
+    }
+    .akun-provider {
+     border: none;
+    }
+
+    .wrap-submit {
+      display: flex;
+      flex-direction: column;
+    }
+    .wrap-input-search {
+      width: 100%;
+    }
+    .wrap-id-header {
+      display: flex;
+      flex-direction: column;
+    }
+    .wrap-created-header {
+      display: flex;
+      flex-direction: column;
+    }
+    .price {
+      margin-left: 0;
+    }
+    .date {
+      margin-right: 0;
+    }
+
+    .wrap-card-body-data {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      justify-content: flex-start;
+    }
+
+    .provider-data {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+    }
 }
 </style>
