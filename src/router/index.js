@@ -1,14 +1,23 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import Body from '../components/body.vue'
+import Order from '../views/Order.vue'
 
 Vue.use(VueRouter)
 
 const routes = [
   {
-    path: '/',
+    path: '/dashboard',
     name: 'Home',
-    component: Home
+    component: Body,
+    children: [
+      {
+        path: 'order',
+        name: 'order',
+        component: Order
+      }
+    ]
+
   },
   {
     path: '/about',
